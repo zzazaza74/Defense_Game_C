@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClInclude Include="buffer.h" />
     <ClInclude Include="monster.h" />
+    <ClInclude Include="weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
