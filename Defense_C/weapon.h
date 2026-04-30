@@ -17,7 +17,7 @@ struct Weapon //(색, 형태 나중에) 공속,
 	int damage; // 1이 데미지
 };
 
-struct Weapon weapon = { 5, 0, 0 };
+struct Weapon weapon = { 10, 0, 0 };
 
 void weapon_render() // 길 위에는 설치 안되게 막기
 {

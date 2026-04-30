@@ -28,7 +28,8 @@ int main()
 	int x = 31;
 	int y = 4;
 	char key = 0;
-	char coin_text[10];
+	char coin_val[12];
+	
 
 	while (1)
 	{
@@ -41,24 +42,32 @@ int main()
 		monster_move();
 		monster_attack();
 		store();
-		// sprintf_s(coin_text, "COIN : %d", cost); apoi로 코인 정수에서 문자로 변환(지금은 터짐)
+		_itoa_s(cost, coin_val, sizeof(coin_val), 10);
+		spawn_monster();   
+		monster_move();          
+		monster_render();  
 
-		render(5, 3, coin_text);
+		render(5, 3, "COIN : "); 
+		render(12, 3, coin_val);
 
-		if (monster.dead == 0)
-		{
-			if (weapon.damage == 1)
-			{
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4); //색은 나중에
-				render(monster.x, monster.y, "m"); // 데미지를 받으면 소문자로 변함
-			}
-			else
-			{
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-				render(monster.x, monster.y, "M");
-			}
-		}
+		// if (monster.dead == 0)
+		// {
+		// 	if (weapon.damage == 1)
+		// 	{
+		// 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4); //색은 나중에
+		// 		render(monster.x, monster.y, "m"); // 데미지를 받으면 소문자로 변함
+		// 	}
+		// 	else
+		// 	{
+		// 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+		// 		render(monster.x, monster.y, "M");
+		// 	}
+		// }
 		
+		if (castle_life == 0)
+		{
+			render(5, 4, "Game Over");
+		}
 
 		flip();
 		Sleep(30);
@@ -86,23 +95,30 @@ int main()
 				break;
 			}
 
-			if (key == 'd')
+			if (cost > 20)
 			{
-				if (x < MAP_WIDTH && y < MAP_HEIGHT)
+				if (key == 'd')
 				{
-					weapon_map[x][y] = 1;
+					if (x < MAP_WIDTH && y < MAP_HEIGHT)
+					{
+						weapon_map[x][y] = 1;
 
-					attack_map[x + 1][y] = 1;
-					attack_map[x - 1][y] = 1;
-					attack_map[x + 2][y] = 1;
-					attack_map[x - 2][y] = 1;
-					attack_map[x][y + 1] = 1;
-					attack_map[x][y - 1] = 1;
-					attack_map[x][y + 2] = 1;
-					attack_map[x][y - 2] = 1;
+						attack_map[x + 1][y] = 1;
+						attack_map[x - 1][y] = 1;
+						attack_map[x + 2][y] = 1;
+						attack_map[x - 2][y] = 1;
+						attack_map[x][y + 1] = 1;
+						attack_map[x][y - 1] = 1;
+						attack_map[x][y + 2] = 1;
+						attack_map[x][y - 2] = 1;
+
+						cost -= 20;
+					}
 				}
 			}
+			
 		}
+
 	}
 	release();
 
