@@ -24,101 +24,151 @@ int main()
 
 	initialize();
 	path();
+	first_monster();
+	reset_monsters();
 
+	int game_start = 0;
+	int game_end = 0;
+	int start_art = 0;
+	int end_art = 0;
 	int x = 31;
 	int y = 4;
 	char key = 0;
 	char coin_val[12];
+	total_spawned = 0;
 	
-
 	while (1)
 	{
-		clear();
-
-		outline(4, 2, "_", "|");
-		render(x, y, "※");
-		weapon_render();
-		test();
-		monster_move();
-		monster_attack();
-		store();
-		_itoa_s(cost, coin_val, sizeof(coin_val), 10);
-		spawn_monster();   
-		monster_move();          
-		monster_render();  
-
-		render(5, 3, "COIN : "); 
-		render(12, 3, coin_val);
-
-		// if (monster.dead == 0)
-		// {
-		// 	if (weapon.damage == 1)
-		// 	{
-		// 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4); //색은 나중에
-		// 		render(monster.x, monster.y, "m"); // 데미지를 받으면 소문자로 변함
-		// 	}
-		// 	else
-		// 	{
-		// 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-		// 		render(monster.x, monster.y, "M");
-		// 	}
-		// }
-		
-		if (castle_life == 0)
+		while (1)
 		{
-			render(5, 4, "Game Over");
+			clear();
+
+			if (game_start == 0  )
+			{
+
+				if (start_art == 0) 
+				{ 
+					render_start();     
+					flip();
+					start_art = 1;  
+				}
+
+				if (_kbhit())
+				{
+					char ch = _getch();
+					if (ch == 's' || ch == 'S')
+					{
+						game_start = 1;
+					}
+				}
+				Sleep(30);
+			}
+			else if (castle_life == 0 )
+			{
+				clear();
+
+				break;
+			}
+			else if (game_start == 1)
+			{
+
+				clear();
+
+				outline(4, 2, "▒", "▒");
+				render(x, y, "●");
+				weapon_render();
+				test();
+				store();
+				_itoa_s(cost, coin_val, sizeof(coin_val), 10);
+				build_path();
+				path_render();
+				spawn_monster();
+				monster_move();
+				monster_attack();
+				monster_render();
+				render(5, 3, "COIN : ");
+				render(12, 3, coin_val);
+				render_life();
+				render_key();
+				render_choice();
+
+				flip();
+				Sleep(30);
+
+				if (_kbhit())
+				{
+					key = _getch();
+
+					if (key == -32 || key == 0)
+					{
+						key = _getch();
+					}
+
+					switch (key)  // 실행창 안에서 움직일 범위 제한
+					{
+					case UP: if (y > 4) { y--; }
+						   break;
+					case LEFT: if (x > 32) { x -= 2; }
+							 break;
+					case RIGHT:if (width - 12 > x) { x += 2; }
+							  break;
+					case DOWN: if (height - 8 > y) { y++; }
+							 break;
+					default: render(0, 0, "xxxxxxxx\n");
+						break;
+					}
+
+					if (cost >= 20)
+					{
+						if (key == 'd')
+						{
+							if (x < MAP_WIDTH && y < MAP_HEIGHT)
+							{
+								weapon_map[x][y] = 1;
+
+								if (x - 1 >= 0) attack_map[x - 1][y] = 1;
+								attack_map[x][y] = 1;
+								if (x + 1 < MAP_WIDTH) attack_map[x + 1][y] = 1;
+
+								if (x - 3 >= 0) attack_map[x - 3][y] = 1;
+								if (x + 3 < MAP_WIDTH) attack_map[x + 3][y] = 1;
+
+								for (int j = -2; j <= 2; j++)
+								{
+									if (y + j >= 0 && y + j < MAP_HEIGHT)
+										attack_map[x][y + j] = 1;
+								}
+
+								cost -= 20;
+							}
+						}
+					}
+
+				}
+			}
+
 		}
 
-		flip();
-		Sleep(30);
+		if (end_art == 0)
+		{
+			render_end();
+			flip();
+			end_art = 1;
+		}
 
 		if (_kbhit())
 		{
-			key = _getch();
-
-			if (key == -32 || key == 0)
+			char cha = _getch();
+			if (cha == 'z' || cha == 'Z')
 			{
-				key = _getch();
+				game_start = 0;
 			}
-
-			switch (key)  // 실행창 안에서 움직일 범위 제한
+			else if (cha == 'x' || cha == 'X')
 			{
-			case UP: if (y > 4) { y--; }
-				   break;
-			case LEFT: if (x > 32) { x -= 2; }
-					 break;
-			case RIGHT:if (width - 12 > x) { x += 2; }
-					  break;
-			case DOWN: if (height - 8 > y) { y++; }
-					 break;
-			default: render(0, 0, "xxxxxxxx\n");
 				break;
 			}
-
-			if (cost > 20)
-			{
-				if (key == 'd')
-				{
-					if (x < MAP_WIDTH && y < MAP_HEIGHT)
-					{
-						weapon_map[x][y] = 1;
-
-						attack_map[x + 1][y] = 1;
-						attack_map[x - 1][y] = 1;
-						attack_map[x + 2][y] = 1;
-						attack_map[x - 2][y] = 1;
-						attack_map[x][y + 1] = 1;
-						attack_map[x][y - 1] = 1;
-						attack_map[x][y + 2] = 1;
-						attack_map[x][y - 2] = 1;
-
-						cost -= 20;
-					}
-				}
-			}
-			
 		}
-
+		Sleep(30);
 	}
 	release();
 

@@ -10,14 +10,14 @@
 int weapon_map[MAP_WIDTH][MAP_HEIGHT] = { 0 };
 int attack_map[MAP_WIDTH][MAP_HEIGHT] = { 0 };
 
-struct Weapon //(색, 형태 나중에) 공속, 
+struct Weapon 
 {
 	int speed;
 	int attack_counter;
-	int damage; // 1이 데미지
+	int damage; 
 };
 
-struct Weapon weapon = { 10, 0, 0 };
+struct Weapon weapon = { 7, 0, 0 };
 
 void weapon_render() // 길 위에는 설치 안되게 막기
 {
@@ -54,34 +54,34 @@ void test() // 공격 범위 잘 지정 되는지 테스트
 void monster_attack()
 {
 	weapon.attack_counter++;
-	
+
 	if (weapon.attack_counter < weapon.speed)
 	{
 		return;
 	}
-	
+
 	weapon.attack_counter = 0;
-	weapon.damage = 0;
 
-	for (int i = 0; i < MAP_WIDTH; i++)
+	for (int i = 0; i < FIRST_WAVE; i++)
 	{
-		for (int j = 0; j < MAP_HEIGHT; j++)
+		if (monster[i].dead == 0)
 		{
-			if (attack_map[i][j] == 1)
+			if (attack_map[monster[i].x][monster[i].y] == 1)
 			{
-				if (monster.x == i && monster.y == j)
-				{
-					if (monster.health > 1)
-					{
-						monster.health--;
-						weapon.damage = 1;
-					}
-					else if (monster.health == 1)
-					{
-						monster.dead = 1;
-					}
-				}
+				monster[i].hit = 1;
 
+				if (monster[i].health > 1)
+				{
+					monster[i].health--;
+				}
+				else
+				{
+					monster[i].dead = 1;
+				}
+			}
+			else
+			{
+				monster[i].hit = 0;
 			}
 		}
 	}

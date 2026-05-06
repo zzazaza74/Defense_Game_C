@@ -7,12 +7,11 @@
 #define MAP_WIDTH 120
 #define MAP_HEIGHT 40
 
-int path_x[100];
-int path_y[100];
 int current_path = 0;
 int castle_life = 3;
 int monster_count = 0;  
 int spawn_time = 0;
+int total_spawned = 0;
 
 struct Monster //이속, 체력, 위치, 생사여부 등 (색, 형태 나중에)
 {
@@ -23,52 +22,64 @@ struct Monster //이속, 체력, 위치, 생사여부 등 (색, 형태 나중에
 	int y;
 	int position;
 	int move_counter;
+	int hit;
 };
 
-// struct Monster monster = { 5, 10, 0, 32, 12, 0 , 0}; 
 struct Monster monster[FIRST_WAVE];
 
 void first_monster()
 {
 	for (int i = 0; i < FIRST_WAVE; i++)
 	{
-		monster[i].health = 3;
-		monster[i].speed = 10;
-		monster[i].dead = 0;
-		monster[i].position = 0;
-		monster[i].move_counter = 0;
+		if (monster[i].dead == 1) 
+		{
+			monster[i].x = path_x[0];
+			monster[i].y = path_y[0];
+			monster[i].health = 3;
+			monster[i].speed = 1;
+			monster[i].dead = 0;     
+			monster[i].position = 0;
+			monster[i].move_counter = 0;
+			monster[i].hit = 0;
+
+			break; 
+		}
 	}
 }
 
 void spawn_monster() 
 {
+	if (total_spawned >= FIRST_WAVE)
+	{
+		return;
+	}
+
 	spawn_time++;
 
-	if (spawn_time >= 20) 
-	{
-		for (int i = 0; i < FIRST_WAVE; i++) 
+	if (spawn_time >= 10) 
+	{ 
+		for (int i = 0; i < FIRST_WAVE; i++)
 		{
 			if (monster[i].dead == 1) 
 			{ 
-				monster[i].dead = 0;
-				monster[i].health = 5;
-				monster[i].position = 0;
-				monster[i].x = path_x[0];
-				monster[i].y = path_y[0];
+				first_monster();
 
+				total_spawned++;
 				spawn_time = 0; 
-				break; 
+				break;
 			}
 		}
 	}
 }
 
-void path() // 나중에 복잡하게 바꾸기
+void path() 
 {
-	int start_x = 32;
+	current_path = 0;
+
+	int start_x = 30;
 	int start_y = 12;
 
-	for (int i = 0; i < 73; i++)
+	for (int i = 0; i < 124; i++)
 	{
 		path_x[current_path] = start_x + i;
 		path_y[current_path] = start_y;
@@ -105,7 +116,8 @@ void path() // 나중에 복잡하게 바꾸기
 // 	}
 // } 
 
-void monster_move() {
+void monster_move() 
+{
 	for (int i = 0; i < FIRST_WAVE; i++) 
 	{
 		if (monster[i].dead == 0) 
@@ -124,18 +136,56 @@ void monster_move() {
 				else 
 				{
 					monster[i].dead = 1; 
+					castle_life--;
+
 				}
 			}
 		}
 	}
 }
 
-void monster_render() {
+void monster_render() 
+{
 	for (int i = 0; i < FIRST_WAVE; i++) 
 	{
 		if (monster[i].dead == 0) 
 		{
-			render(monster[i].x, monster[i].y, "M");
+			if (monster[i].hit == 1)
+			{
+				render(monster[i].x, monster[i].y, "♘");
+			}
+			else
+			{
+				render(monster[i].x, monster[i].y, "♞");
+			}
 		}
+	}
+}
+
+void reset_monsters() 
+{
+	for (int i = 0; i < FIRST_WAVE; i++) {
+		monster[i].dead = 1;
+	}
+	total_spawned = 0; 
+}
+
+void render_life()
+{
+	if (castle_life == 3)
+	{
+		render(103, 3, "LIFE : ♡ ♡ ♡ ");
+	}
+	else if (castle_life == 2)
+	{
+		render(103, 3, "LIFE : ♡ ♡  ");
+	}
+	else if (castle_life == 1)
+	{
+		render(103, 3, "LIFE : ♡  ");
+	}
+	else 
+	{
+		render(103, 3, "LIFE :  ");
 	}
 }
