@@ -15,9 +15,15 @@ struct Weapon
 	int speed;
 	int attack_counter;
 	int damage; 
+	int range;
 };
 
-struct Weapon weapon = { 7, 0, 0 };
+struct Weapon weapon = { 7, 0, 1, 2 };
+
+struct Weapon weapon_snow = { 4, 0, 1, 2};
+struct Weapon weapon_spear = { 4, 0, 3, 2 };
+struct Weapon weapon_arrow = { 2, 0, 2, 3 };
+struct Weapon weapon_cannon = { 3, 0, 4, 3 };
 
 void weapon_render() // 길 위에는 설치 안되게 막기
 {
@@ -72,7 +78,7 @@ void monster_attack()
 
 				if (monster[i].health > 1)
 				{
-					monster[i].health--;
+					monster[i].health -= weapon.damage;
 				}
 				else
 				{

@@ -23,11 +23,11 @@ struct Monster //이속, 체력, 위치, 생사여부 등 (색, 형태 나중에
 	int position;
 	int move_counter;
 	int hit;
-};
+}; 
 
 struct Monster monster[FIRST_WAVE];
 
-void first_monster()
+void first_monster() 
 {
 	for (int i = 0; i < FIRST_WAVE; i++)
 	{
@@ -36,7 +36,7 @@ void first_monster()
 			monster[i].x = path_x[0];
 			monster[i].y = path_y[0];
 			monster[i].health = 3;
-			monster[i].speed = 1;
+			monster[i].speed = 5;
 			monster[i].dead = 0;     
 			monster[i].position = 0;
 			monster[i].move_counter = 0;
@@ -137,7 +137,6 @@ void monster_move()
 				{
 					monster[i].dead = 1; 
 					castle_life--;
-
 				}
 			}
 		}
@@ -162,7 +161,7 @@ void monster_render()
 	}
 }
 
-void reset_monsters() 
+void reset_monster() 
 {
 	for (int i = 0; i < FIRST_WAVE; i++) {
 		monster[i].dead = 1;
