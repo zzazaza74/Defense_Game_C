@@ -26,35 +26,40 @@ int main()
 	path();
 	first_monster();
 	reset_monster();
+	wave_data();
 
 	int game_start = 0;
 	int game_end = 0;
+	int game_clear = 0;
 	int start_art = 0;
 	int end_art = 0;
+	int clear_art = 0;
 	int x = 31;
 	int y = 4;
 	int point_x = 5;
 	int point_y = 6;
 	char key = 0;
 	char coin_val[12];
+	char wave_str[5];
 	int change = 0; // 0일때 화살표
 	int coin_check = 0;
+	int current_wave = 0;
 	total_spawned = 0;
-	
+
 	while (1)
 	{
 		while (1)
 		{
 			clear();
 
-			if (game_start == 0  )
+			if (game_start == 0)
 			{
 
-				if (start_art == 0) 
-				{ 
-					render_start();     
+				if (start_art == 0)
+				{
+					render_start();
 					flip();
-					start_art = 1;  
+					start_art = 1;
 				}
 
 				if (_kbhit())
@@ -67,7 +72,7 @@ int main()
 				}
 				Sleep(30);
 			}
-			else if (castle_life == 0 )
+			else if (castle_life <= 0)
 			{
 				clear();
 
@@ -91,18 +96,46 @@ int main()
 				//test();
 				store();
 				_itoa_s(cost, coin_val, sizeof(coin_val), 10);
+				_itoa_s(current_wave + 1, wave_str, sizeof(wave_str), 10);
 				build_path();
 				path_render();
-				spawn_monster();
 				monster_move();
 				monster_attack();
 				monster_render();
+				spawn_monster_wave(current_wave);
 				render(5, 3, "COIN : ");
 				render(12, 3, coin_val);
 				render_life();
 				render_key();
 				render_choice();
 
+				int alive_count = 0;
+
+				for (int i = 0; i < MAX_MONSTER; i++)
+				{
+					if (monster[i].dead == 0) alive_count++;
+				}
+
+				if (total_spawned >= wave_monster_count[current_wave] && alive_count == 0)
+				{
+					if (current_wave < 4)
+					{
+						render(63, 3, wave_str);
+						render(65, 3, "round clear!");
+						current_wave++;
+						total_spawned = 0;
+						spawn_time = 0;
+
+						flip();
+						Sleep(2000);
+					}
+					else
+					{
+						game_clear = 1;
+						break;
+					}
+
+				}
 
 				flip();
 				Sleep(30);
@@ -119,7 +152,7 @@ int main()
 					   break;
 
 				}
-				
+
 				if (_kbhit())
 				{
 					key = _getch();
@@ -138,9 +171,9 @@ int main()
 						case DOWN: if (point_y < 15) { point_y += 3; }
 								 break;
 						case 'a': if (cost >= coin_check) { change = 1; }
-							break;
+								break;
 						case 'A': if (cost >= coin_check) { change = 1; }
-									break;
+								break;
 						default: render(0, 0, "잘못된 키 입력");
 							break;
 						}
@@ -161,7 +194,6 @@ int main()
 							break;
 						}
 					}
-				
 
 					if (cost >= coin_check)
 					{
@@ -188,18 +220,22 @@ int main()
 							}
 						}
 					}
-
 				}
+
 			}
 
 		}
 
-		if (end_art == 0)
+		clear();
+		if (game_clear == 1)
 		{
-			render_end();
-			flip();
-			end_art = 1;
+			render_clear(); 
 		}
+		else if (castle_life <= 0)
+		{
+			render_end();   
+		}
+		flip();
 
 		if (_kbhit())
 		{
@@ -207,17 +243,35 @@ int main()
 			if (cha == 'z' || cha == 'Z')
 			{
 				game_start = 0;
+				castle_life = 3;
+				game_clear = 0;
+				start_art = 0;
+				end_art = 0;
+				clear_art = 0;
+				current_wave = 0;
+				total_spawned = 0;
+				spawn_time = 0; 
+				cost = 0;
+				reset_monster();
+
+				for (int i = 0; i < MAP_WIDTH; i++)
+				{
+					for (int j = 0; j < MAP_HEIGHT; j++)
+					{
+						weapon_map[i][j] = 0; 
+						attack_map[i][j] = 0; 
+					}
+				}
+
 			}
 			else if (cha == 'x' || cha == 'X')
 			{
-				break;
+				release();
+				return 0;
 			}
 		}
-		Sleep(30);
+		Sleep(30);	
 	}
-	release();
-
-	return 0;
 }
 // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); >> 나중에 색 바꾸는거 추가하기
 // ex) 공격 받을 때 몬스터 색, 사용자가 무기 설치 가능한 지역에 있을 때 색

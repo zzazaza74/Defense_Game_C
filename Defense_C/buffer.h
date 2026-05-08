@@ -78,7 +78,7 @@ void render(int x, int y, const char* character)
 	WriteFile(screen[index], character, strlen(character), &dword, NULL);
 }
 
-void outline(int x, int y, const char* character1, const char* character2) // 실행창 테두리 만들기 >> 가로 세로 같은 기호로 바꾸기
+void outline(int x, int y, const char* character1, const char* character2) 
 {
 	CONSOLE_SCREEN_BUFFER_INFO console;
 	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -291,6 +291,25 @@ void render_end()
 
 	render(start_x + 30, start_y + 22, "[ 'Z' : 다시하기 / 'X' : 나가기 ]");
 }
+
+void render_clear()
+{
+	int start_x = 13;
+	int start_y = 8;
+
+	render(start_x, start_y + 0, "  ZZZZZZZZ  5ZZZZZZZ  ZEZZ  WZZzZZZZZE99EBZ       ZZZZZZZ  Z99Z     Z8ZZE9EzZW ZZZZZZZZ Z9ZZEZZZZ   ");
+	render(start_x, start_y + 1, " ZW       ZDZ       Z Z   ZWZ   ZZ        Z     jZ       Z Z  Z     Z       9,Z       B8Z        Z  ");
+	render(start_x, start_y + 2, " Z  ZZZZZZZ5W yZZZ  Z Z W  Z ,W Zz  zZZZZZZ     jZ  ZZZZw E Z  Z     Z  ZZZZZZ Z  ZZZZ8  ZZ  ZZZZ  Z  ");
+	render(start_x, start_y + 3, " Z  EZ    Zyy jZ5Z  Z Z ,w   w, Zyw,     Z      jZ  Z yZZZ Z  Z     Z      B  Z  Z5ZD, ZZ  8D9   Z  ");
+	render(start_x, start_y + 4, " Z  ZZy9W Zjy,      Z Z  Z   Z  ZjW,5ZZZZZ      WZ  Z  W 5 Z  Z     Z ,ZZZZZ  Z      w ZZ ,    WZZ  ");
+	render(start_x, start_y + 5, " Z  y899, ZwDw5ZZZ, Z Z  ZZZZZ  ZWyWjZ889zZ      Z  ZWZW 9 Z wZ5EEz5Z wzE8zEZ Z wZZZzW,EZ W9ZZ ,WZ  ");
+	render(start_x, start_y + 6, " ZZ      ZZwj BZWZ  Z Z  ZEZ Z  Z w       Z     ,ZZ      5Z Z       ZZ       9 Z  Z BZ  BZ  Z8ZZ  Z  ");
+	render(start_x, start_y + 7, "  ZZZZZZZZ zZZZ, ZZZZ ZZZZ   ZZZZDZZZZZZZZZ      wZZZZZZZ5 ZZZZZZZZZZZZZZZZZZ ZZZZ  ZZZZZZZZ  ZZZZ  ");
+
+	render(start_x + 26, start_y + 12, "축하합니다! 성을 적들로 부터 지켜내었습니다!");
+	render(start_x + 30, start_y + 15, "[ 'Z' : 다시하기 / 'X' : 나가기 ]");
+}
+
 
 void render_key()
 {

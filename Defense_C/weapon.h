@@ -33,7 +33,7 @@ void weapon_render() // 길 위에는 설치 안되게 막기
 		{
 			if (weapon_map[i][j] == 1)
 			{
-				render(i, j, "d");
+				render(i, j, "◎");
 			}
 		}
 	}
@@ -68,7 +68,7 @@ void monster_attack()
 
 	weapon.attack_counter = 0;
 
-	for (int i = 0; i < FIRST_WAVE; i++)
+	for (int i = 0; i < MAX_MONSTER; i++)
 	{
 		if (monster[i].dead == 0)
 		{
