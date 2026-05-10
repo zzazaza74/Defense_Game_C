@@ -225,7 +225,7 @@ void store()
 {
 	coin_count++;
 
-	if (coin_count > 10)
+	if (coin_count > 20)
 	{
 		cost += 5;
 		coin_count = 0;
@@ -319,15 +319,14 @@ void render_key()
 }
 void render_choice()
 {
-	render(6, 6, "【눈덩이 】 ¨ 20코인 ¨ ");
+	render(6, 6, "【눈덩이 ○ 】 ¨20코인¨ ");
 	render(6, 7, "데미지 1:범위 2:공속 5 ");
-	render(6, 9, "【죽창 】 ¨ 40코인 ¨ ");
+	render(6, 9, "【죽창 ♧ 】 ¨40코인¨ ");
 	render(6, 10, "데미지 3:범위 2:공속 5 ");
-	render(6, 12, "【화살 】 ¨ 60코인 ¨ ");
+	render(6, 12, "【화살 ♤ 】 ¨60코인¨ ");
 	render(6, 13, "데미지 2:범위 3:공속 10 ");
-	render(6, 15, "【대포 】 ¨ 80코인 ¨ ");
+	render(6, 15, "【대포 ☆ 】 ¨80코인¨ ");
 	render(6, 16, "데미지 4:범위 3:공속 8 ");
-
 }
 
 

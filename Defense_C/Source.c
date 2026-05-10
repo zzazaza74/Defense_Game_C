@@ -24,7 +24,7 @@ int main()
 
 	initialize();
 	path();
-	first_monster();
+	//first_monster();
 	reset_monster();
 	wave_data();
 
@@ -197,24 +197,24 @@ int main()
 
 					if (cost >= coin_check)
 					{
-						if (key == 'd')
+						if (key == 'd' || key == 'D')
 						{
 							if (x < MAP_WIDTH && y < MAP_HEIGHT)
 							{
-								weapon_map[x][y] = 1;
+								int choice_type = (point_y - 6) / 3;
 
-								if (x - 1 >= 0) attack_map[x - 1][y] = 1;
-								attack_map[x][y] = 1;
-								if (x + 1 < MAP_WIDTH) attack_map[x + 1][y] = 1;
+								weapon_map[x][y] = choice_type + 1;
 
-								if (x - 3 >= 0) attack_map[x - 3][y] = 1;
-								if (x + 3 < MAP_WIDTH) attack_map[x + 3][y] = 1;
+								int r = weapon_range[choice_type];
 
-								for (int j = -2; j <= 2; j++)
+								for (int i = -r; i <= r; i++)
 								{
-									if (y + j >= 0 && y + j < MAP_HEIGHT)
-										attack_map[x][y + j] = 1;
+									if (x + i >= 0 && x + i < MAP_WIDTH)
+										attack_map[x + i][y] = 1;
+									if (y + i >= 0 && y + i < MAP_HEIGHT)
+										attack_map[x][y + i] = 1;
 								}
+
 								cost -= coin_check;
 								change = 0;
 							}
@@ -260,6 +260,7 @@ int main()
 					{
 						weapon_map[i][j] = 0; 
 						attack_map[i][j] = 0; 
+						weapon_cooltime[i][j] = 0;
 					}
 				}
 
