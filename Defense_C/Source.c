@@ -94,12 +94,12 @@ int main()
 				}
 				weapon_render();
 				//test();
-				store();
+				store(); 
 				_itoa_s(cost, coin_val, sizeof(coin_val), 10);
 				_itoa_s(current_wave + 1, wave_str, sizeof(wave_str), 10);
 				build_path();
 				path_render();
-				monster_move();
+				monster_move(); 
 				monster_attack();
 				monster_render();
 				spawn_monster_wave(current_wave);

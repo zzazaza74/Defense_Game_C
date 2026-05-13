@@ -12,7 +12,7 @@ int attack_map[MAP_WIDTH][MAP_HEIGHT] = { 0 };
 
 int weapon_speed[] = { 8, 8, 4, 5 };
 int weapon_damage[] = { 1, 3, 2, 4 };
-int weapon_range[] = { 2, 2, 3, 3 };
+int weapon_range[] = { 1, 2, 3, 3 };
 int weapon_cooltime[MAP_WIDTH][MAP_HEIGHT] = { 0 };
 const char* weapon_shape[] = { "○", "♧", "♤", "☆" };
 
